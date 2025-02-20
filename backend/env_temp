@@ -1,0 +1,14 @@
+#mongodb database url
+MONGO_URL=
+
+#port number of the server
+PORT=3001
+
+#jwt secret
+JWT_SECRET=
+
+EMAIL=
+
+EMAIL_PASSWORD=
+
+FRONTEND_URL=

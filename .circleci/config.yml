@@ -1,0 +1,46 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5
+
+jobs:
+  test-backend:
+    executor: node/default
+    working_directory: ~/project/backend
+    environment:
+      JEST_JUNIT_OUTPUT_DIR: ./test-results/
+    steps:
+      - checkout:
+          path: ~/project
+      - run:
+          name: install app dependencies
+          command: npm install --legacy-peer-deps
+      - run:
+          name: run tests
+          command: npm run test
+      - run:
+          name: run linter
+          command: npm run lint
+      - run:
+         name: deploy app - stage 
+         command: curl "https://api.render.com/deploy/srv-cqelblggph6c73as6pn0?key=R-Bn3VmmFIk"
+
+  deploy-backend:
+    executor: node/default
+    working_directory: ~/project/backend
+    steps:
+      - run:
+          name: deploy app
+          command: curl "https://api.render.com/deploy/srv-cqdo77ogph6c73a9sr50?key=bf3TB6lfK-g"
+
+workflows:
+  version: 2
+  test-and-deploy:
+    jobs:
+      - test-backend
+      - deploy-backend:
+          requires:
+            - test-backend
+          filters:
+            branches:
+              only: production 
